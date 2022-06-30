@@ -1,22 +1,45 @@
+PATH
+  remote: .
+  specs:
+    rspec--auto (0.1.0)
+      listen
+      rb-fsevent
+      warning
+
 GEM
   remote: https://rubygems.org/
   specs:
+    diff-lcs (1.5.0)
     ffi (1.15.5)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    rake (13.0.6)
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rspec (3.11.0)
+      rspec-core (~> 3.11.0)
+      rspec-expectations (~> 3.11.0)
+      rspec-mocks (~> 3.11.0)
+    rspec-core (3.11.0)
+      rspec-support (~> 3.11.0)
+    rspec-expectations (3.11.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.11.0)
+    rspec-mocks (3.11.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.11.0)
+    rspec-support (3.11.0)
     warning (1.2.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  listen
-  rb-fsevent
-  warning
+  rake (~> 13.0)
+  rspec (~> 3.0)
+  rspec--auto!
 
 BUNDLED WITH
    2.3.12
