@@ -56,7 +56,7 @@ module RSpec
 
       def _rspec_args
         pwd = Dir.pwd
-        if (specs=@argv.any?{ |fname| fname["_spec.rb"] })
+        if (specs=@argv.find_all{ |fname| fname["_spec.rb"] }).any?
           puts "[.] running ONLY #{specs.map(&method(:short_path)).join(' ')}"
           @argv
         elsif @monitored_files.all?{ |fname| fname.end_with?("_spec.rb") }
