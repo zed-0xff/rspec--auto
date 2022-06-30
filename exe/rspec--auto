@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+require 'rb-fsevent'
+require 'listen'
+require 'warning'
+
+# when there's symlink loops, safe to ignore
+Warning.ignore /directory is already being watched/
+# when multiple versions of json gem loaded
+#Warning.ignore /warning: already initialized constant JSON::/
+#Warning.ignore %r|/lib/json/|
+
+require_relative "../lib/rspec/auto"
+l1 = RSpec::Auto::Level1.new(ARGV)
+pwds = Dir.pwd + "/"
+
+listener = Listen.to('.', only: /\.rb$/) do |modified, added, removed|
+  modified.each { |fname| puts "[*] #{fname.sub(pwds,"")} modified" }
+  added.each    { |fname| puts "[+] #{fname.sub(pwds,"")} added" }
+  removed.each  { |fname| puts "[-] #{fname.sub(pwds,"")} deleted" }
+  l1.foo(modified + added)
+end
+
+puts "[.] listening for changes .."
+listener.start
+
+t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+ENV["RUBY_ENV"] ||= "test"
+require "bundler"
+Bundler.setup
+Bundler.require(:default, ENV["RUBY_ENV"])
+t1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+printf "[.] %5.3fs bundler init\n", t1-t0
+
+begin
+  sleep
+rescue Interrupt
+  listener.stop
+  exit!
+end
+
+listener.stop
+exit!
